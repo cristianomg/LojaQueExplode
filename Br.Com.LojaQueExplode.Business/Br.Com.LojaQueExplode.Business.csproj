@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Services\Concrete\CreateUserService.cs~RF2980e3a.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Br.Com.LojaQueExplode.Domain\Br.Com.LojaQueExplode.Domain.csproj" />
+    <ProjectReference Include="..\Br.Com.LojaQueExplode.Infra\Br.Com.LojaQueExplode.Infra.csproj" />
+    <ProjectReference Include="..\Br.Com.LojaQueExplode.Util\Br.Com.LojaQueExplode.Util.csproj" />
+  </ItemGroup>
+
+</Project>
