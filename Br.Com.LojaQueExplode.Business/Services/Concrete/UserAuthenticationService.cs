@@ -35,8 +35,6 @@ namespace Br.Com.LojaQueExplode.Business.Services.Concrete
             var existingUser = _userRepository.GetByEmail(userCredentials.Email,
                 includes: new List<string> { nameof(User.Permission) });
 
-            var permission = _permissionRepository.GetById(existingUser.PermissionId);
-
             if (existingUser != null)
             {
                 var correctPassword  = _encryption.CheckPassword(userCredentials.Password, existingUser.Password);
@@ -52,7 +50,7 @@ namespace Br.Com.LojaQueExplode.Business.Services.Concrete
                         {
 
                             new Claim(ClaimTypes.Name, existingUser.Name),
-                            new Claim(ClaimTypes.Role, permission.Name),
+                            new Claim(ClaimTypes.Role, existingUser.Permission.Name),
 
                         }),
                         Expires = DateTime.UtcNow.AddHours(3),

@@ -18,9 +18,9 @@ namespace Br.Com.LojaQueExplode.Infra.Repositories.Concrete
         {
             var users = _dbSet.AsQueryable();
             if (includes != null && includes.Any())
-                foreach(var include in includes)
+                foreach (var include in includes)
                 {
-                    users.Include(include);
+                    users = users.Include(include);
                 }
             return users.FirstOrDefault(x => x.Email == email);
         }

@@ -48,7 +48,7 @@ namespace Br.Com.LojaQueExplode.Infra.Repositories.Concrete
 
                 foreach (var include in includes)
                 {
-                    result.Include(include);
+                    result = result.Include(include);
                 }
                 return result;
             }
