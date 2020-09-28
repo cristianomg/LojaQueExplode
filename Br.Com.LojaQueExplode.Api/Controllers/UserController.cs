@@ -34,18 +34,18 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
         {
             try
             {
-                var validacao = new CreateUserValidation();
-                var resultadoValidacao = validacao.Validate(body);
-                if (!resultadoValidacao.IsValid)
-                    return BadRequest(resultadoValidacao.Errors);
+                var validator = new CreateUserValidation();
+                var rusultValidation = validator.Validate(body);
+                if (!rusultValidation.IsValid)
+                    return BadRequest(rusultValidation.Errors);
 
                 try
                 {
-                    var novoUsuario = _createUserService.Execute(body);
+                    var newUser = _createUserService.Execute(body);
 
-                    if (novoUsuario != null)
+                    if (newUser != null)
                     {
-                        var dto = _mapper.Map<DTOUser>(novoUsuario);
+                        var dto = _mapper.Map<DTOUser>(newUser);
                         return Created($"{ControllerContext.HttpContext.Request.Path.Value}", dto);
 
                     }

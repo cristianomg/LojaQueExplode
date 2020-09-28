@@ -29,10 +29,10 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
         {
             try
             {
-                var resultadoAutenticicacao = _authService.Execute(body);
-                if (resultadoAutenticicacao != null)
+                var resultAuthentication = _authService.Execute(body);
+                if (resultAuthentication != null)
                 {
-                    var dto = _mapper.Map<DTOResultAuthentication>(resultadoAutenticicacao);
+                    var dto = _mapper.Map<DTOResultAuthentication>(resultAuthentication);
                     return Ok(dto);
                 }
                 return BadRequest("Email ou senha invalido tente novamente.");
