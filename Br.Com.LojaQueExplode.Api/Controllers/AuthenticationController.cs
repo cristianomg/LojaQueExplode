@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Br.Com.LojaQueExplode.Api.Models;
+using Br.Com.LojaQueExplode.Api.Validations.Auth;
 using Br.Com.LojaQueExplode.Business.DTOs;
 using Br.Com.LojaQueExplode.Business.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +30,11 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
         {
             try
             {
+                var validator = new UserAuthenticationValidation();
+                var rusultValidation = validator.Validate(body);
+                if (!rusultValidation.IsValid)
+                    return BadRequest(rusultValidation.Errors);
+
                 var resultAuthentication = _authService.Execute(body);
                 if (resultAuthentication != null)
                 {
