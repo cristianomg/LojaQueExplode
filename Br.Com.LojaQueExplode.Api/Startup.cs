@@ -3,6 +3,8 @@ using Br.Com.LojaQueExplode.Api.Models;
 using Br.Com.LojaQueExplode.Business.DTOs;
 using Br.Com.LojaQueExplode.Business.Services.Abstract;
 using Br.Com.LojaQueExplode.Business.Services.Concrete;
+using Br.Com.LojaQueExplode.Business.WebServices.Abstract;
+using Br.Com.LojaQueExplode.Business.WebServices.Concrete;
 using Br.Com.LojaQueExplode.Domain.Configurations;
 using Br.Com.LojaQueExplode.Domain.Entities;
 using Br.Com.LojaQueExplode.Infra.Context;
@@ -48,7 +50,8 @@ namespace Br.Com.LojaQueExplode.Api
 
             services.AddControllers();
 
-            var secretKey = Configuration.GetValue<string>("SecretKey");
+            string JWT_SECRET_KEY = Configuration.GetValue<string>("Jwt.SecretKey");
+            string IMGBB_SECRET_KEY = Configuration.GetValue<string>("Jwt.SecretKey");
 
             services.AddAuthentication(x =>
             {
@@ -62,11 +65,18 @@ namespace Br.Com.LojaQueExplode.Api
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JWT_SECRET_KEY)),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
             });
+
+            AutoMapperConfiguration(services);
+            RegisterUtilities(services);
+            RegisterServices(services);
+            RegisterRepostories(services);
+            RegisterUnitOfWork(services);
+            RegisterWebServices(services);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -86,17 +96,11 @@ namespace Br.Com.LojaQueExplode.Api
                     });
             });
 
-
-            AutoMapperConfiguration(services);
-            RegisterUtilities(services);
-            RegisterServices(services);
-            RegisterRepostories(services);
-            RegisterUnitOfWork(services);
-
             services.AddSingleton<BaseConfigurations, BaseConfigurations>(op =>
             {
                 var obj = new BaseConfigurations();
-                obj.SecretKey = secretKey;
+                obj.JwtSecretKey = JWT_SECRET_KEY;
+                obj.ImgbbSecretKey = IMGBB_SECRET_KEY;
 
                 return obj;
             });
@@ -132,16 +136,25 @@ namespace Br.Com.LojaQueExplode.Api
         {
             services.AddTransient<ICreateUserService, CreateUserService>();
             services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
+            services.AddTransient<ICreateCategoryService, CreateCategoryService>();
+            services.AddTransient<ICreateProductService, CreateProductService>();
         }
 
         private void RegisterRepostories(IServiceCollection services)
         {
             services.AddTransient<IUserRepository, EFUserRepository>();
             services.AddTransient<IPermissionRepository, EFPermissionRepository>();
+            services.AddTransient<ICategoryRepository, EFCategoryRepository>();
+            services.AddTransient<IProductRepository, EFProductRepository>();
         }
         private void RegisterUnitOfWork(IServiceCollection services)
         {
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+        }
+
+        private void RegisterWebServices(IServiceCollection services)
+        {
+            services.AddSingleton<IImageStorageWebService, ImgBBStorageWebService>();
         }
 
         private void RegisterUtilities(IServiceCollection services)
@@ -154,7 +167,11 @@ namespace Br.Com.LojaQueExplode.Api
             var mapperConfiguration = new MapperConfiguration(config =>
             {
                 config.CreateMap<User, DTOUser>();
-                config.CreateMap<ResultAuthentication, DTOResultAuthentication>();
+                config.CreateMap<AuthenticationResult, DTOResultAuthentication>();
+                config.CreateMap<Product, DTOProduct>();
+                config.CreateMap<Category,DTOCategory>();
+                config.CreateMap<ComplementaryProductData, DTOComplementaryProductData>();
+                config.CreateMap<ProductPhoto, DTOProducPhoto>();
             });
 
             IMapper mapper = mapperConfiguration.CreateMapper();

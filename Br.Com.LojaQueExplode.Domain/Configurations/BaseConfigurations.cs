@@ -7,6 +7,7 @@ namespace Br.Com.LojaQueExplode.Domain.Configurations
 {
     public class BaseConfigurations
     {
-        public string SecretKey { get; set; }
+        public string JwtSecretKey { get; set; }
+        public string ImgbbSecretKey { get; set; }
     }
 }

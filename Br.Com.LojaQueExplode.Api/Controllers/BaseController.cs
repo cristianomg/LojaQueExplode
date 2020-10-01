@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Br.Com.LojaQueExplode.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Br.Com.LojaQueExplode.Api.Controllers

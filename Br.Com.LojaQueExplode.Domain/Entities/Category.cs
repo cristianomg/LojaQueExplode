@@ -8,4 +8,5 @@ namespace Br.Com.LojaQueExplode.Domain.Entities
         public string Description { get; set; }
         public virtual ICollection<Product> Products { get; set; }
     }
+
 }

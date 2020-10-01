@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Br.Com.LojaQueExplode.Business.DTOs
 {
-    public class ResultAuthentication
+    public class AuthenticationResult
     {
         public User User { get; set; }
         public string Token { get; set; }

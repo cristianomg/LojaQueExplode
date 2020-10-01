@@ -30,7 +30,7 @@ namespace Br.Com.LojaQueExplode.Business.Services.Concrete
             _config = config;
         }
 
-        public ResultAuthentication Execute(DTOUserCredentials userCredentials)
+        public AuthenticationResult Execute(DTOUserCredentials userCredentials)
         {
             var existingUser = _userRepository.GetByEmail(userCredentials.Email,
                 includes: new List<string> { nameof(User.Permission) });
@@ -42,7 +42,7 @@ namespace Br.Com.LojaQueExplode.Business.Services.Concrete
                 if (correctPassword)
                 {
                     var tokenHandler = new JwtSecurityTokenHandler();
-                    var key = Encoding.ASCII.GetBytes(_config.SecretKey);
+                    var key = Encoding.ASCII.GetBytes(_config.JwtSecretKey);
 
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
@@ -60,7 +60,7 @@ namespace Br.Com.LojaQueExplode.Business.Services.Concrete
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
 
-                    return new ResultAuthentication { User = existingUser, Token = tokenHandler.WriteToken(token), Permission = existingUser.Permission.Name };
+                    return new AuthenticationResult { User = existingUser, Token = tokenHandler.WriteToken(token), Permission = existingUser.Permission.Name };
                 }
             }
             return default;

@@ -28,7 +28,7 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
             _createUserService = createUserService;
         }
 
-        [HttpPost(Name = "Criar Usuário")]
+        [HttpPost(Name = "Criar-Usuário")]
         [AllowAnonymous]
         public IActionResult CreateUser([FromBody] DTOCreateUser body)
         {
