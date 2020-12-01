@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Br.Com.LojaQueExplode.Infra.Migrations
 {
     [DbContext(typeof(LojaQueExplodeContext))]
-    [Migration("20200928032711_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20201201010157_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -82,12 +82,12 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d39f7e78-8f26-4541-b9cb-f13b52011cff"),
+                            Id = new Guid("a4e1059d-0efe-42a5-b1b3-c94458be3b87"),
                             Name = "Common"
                         },
                         new
                         {
-                            Id = new Guid("3588783c-c63d-436d-8066-c478bf757f51"),
+                            Id = new Guid("198b8a91-23f4-4d73-99a0-63ae594f39b5"),
                             Name = "Administration"
                         });
                 });
@@ -171,6 +171,9 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("ProductId", "ShoppingCartId");
 
                     b.HasIndex("ShoppingCartId");
@@ -204,42 +207,42 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3baedf97-cca0-4b3a-9108-5e9adda8a33a"),
+                            Id = new Guid("b167e4b3-597d-4696-bf2c-b4fda3f0e8eb"),
                             Code = 1,
                             Description = "",
                             Name = "Open"
                         },
                         new
                         {
-                            Id = new Guid("cacc4683-5b81-411a-b650-7327f936b34e"),
+                            Id = new Guid("45b7c40e-c952-4b28-938e-3da2e665641f"),
                             Code = 2,
                             Description = "",
                             Name = "RequestedProducts"
                         },
                         new
                         {
-                            Id = new Guid("2faf6f6f-7022-48ad-8208-b4b76620f967"),
+                            Id = new Guid("bf6dbb82-98a6-4ca9-b461-e3998af66d98"),
                             Code = 3,
                             Description = "",
                             Name = "PaymentMade"
                         },
                         new
                         {
-                            Id = new Guid("d8a9d862-1d2c-4d7e-852c-185d377bd1c7"),
+                            Id = new Guid("c7a24e0a-f1b4-45b0-a461-3fdb31bb63bd"),
                             Code = 4,
                             Description = "",
                             Name = "PaymentApproved"
                         },
                         new
                         {
-                            Id = new Guid("a798cf82-085e-4c21-9ec9-b67ab1f471a3"),
+                            Id = new Guid("bd60421b-f8ff-415f-90d5-260a6cda29b2"),
                             Code = 5,
                             Description = "",
                             Name = "SendedProducts"
                         },
                         new
                         {
-                            Id = new Guid("1d8f40d8-b3ce-4bdd-aeb1-568c26bdb630"),
+                            Id = new Guid("475dfdb2-5583-46a1-9799-77702c1e59bc"),
                             Code = 6,
                             Description = "",
                             Name = "PurchaseFinished"

@@ -49,7 +49,8 @@ namespace Br.Com.LojaQueExplode.Infra.Context
                     Id = Guid.NewGuid(),
                     Name = nameof(PermissionsEnum.Common)
                 },
-                new Permission {
+                new Permission
+                {
                     Id = Guid.NewGuid(),
                     Name = nameof(PermissionsEnum.Administration)
                 });

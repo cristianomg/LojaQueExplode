@@ -1,6 +1,4 @@
 ﻿using Br.Com.LojaQueExplode.Util.Security.Abstract;
-using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -8,7 +6,7 @@ namespace Br.Com.LojaQueExplode.Util.Security.Concrete
 {
     public class EncryptionSHA256 : IEncryption
     {
-        private HashAlgorithm _algoritmo;
+        private readonly HashAlgorithm _algoritmo;
         public EncryptionSHA256()
         {
             _algoritmo = SHA256.Create();

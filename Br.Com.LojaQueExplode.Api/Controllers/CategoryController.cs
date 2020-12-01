@@ -6,7 +6,6 @@ using Br.Com.LojaQueExplode.Business.Exceptions;
 using Br.Com.LojaQueExplode.Business.Services.Abstract;
 using Br.Com.LojaQueExplode.Domain.Enums;
 using Br.Com.LojaQueExplode.Infra.Repositories.Abstract;
-using Br.Com.LojaQueExplode.Infra.UnitOfWork.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -19,13 +18,11 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
     [ApiController]
     public class CategoryController : BaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICreateCategoryService _createCategoryService;
-        public CategoryController(IUnitOfWork unitOfWork, ICategoryRepository categoryRepository,
+        public CategoryController(ICategoryRepository categoryRepository,
             ICreateCategoryService createCategoryService, IMapper mapper) : base(mapper)
         {
-            _unitOfWork = unitOfWork;
             _categoryRepository = categoryRepository;
             _createCategoryService = createCategoryService;
         }

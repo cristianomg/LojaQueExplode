@@ -50,6 +50,10 @@ namespace Br.Com.LojaQueExplode.Api
 
             services.AddControllers();
 
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             string JWT_SECRET_KEY = Configuration.GetValue<string>("Jwt.SecretKey");
             string IMGBB_SECRET_KEY = Configuration.GetValue<string>("Jwt.SecretKey");
 
@@ -78,7 +82,6 @@ namespace Br.Com.LojaQueExplode.Api
             RegisterUnitOfWork(services);
             RegisterWebServices(services);
 
-            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
 
@@ -98,9 +101,11 @@ namespace Br.Com.LojaQueExplode.Api
 
             services.AddSingleton<BaseConfigurations, BaseConfigurations>(op =>
             {
-                var obj = new BaseConfigurations();
-                obj.JwtSecretKey = JWT_SECRET_KEY;
-                obj.ImgbbSecretKey = IMGBB_SECRET_KEY;
+                var obj = new BaseConfigurations
+                {
+                    JwtSecretKey = JWT_SECRET_KEY,
+                    ImgbbSecretKey = IMGBB_SECRET_KEY
+                };
 
                 return obj;
             });
@@ -138,6 +143,10 @@ namespace Br.Com.LojaQueExplode.Api
             services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
             services.AddTransient<ICreateCategoryService, CreateCategoryService>();
             services.AddTransient<ICreateProductService, CreateProductService>();
+            services.AddTransient<IAddProductOnShoppingCartService, AddProductOnShoppingCartService>();
+            services.AddTransient<IRemoveProductOnShoppingCartService, RemoveProductOnShoppingCartService>();
+            services.AddTransient<IGetOrCreateShoppingCartOpenedService, GetOrCreateShoppingCartService>();
+
         }
 
         private void RegisterRepostories(IServiceCollection services)
@@ -146,6 +155,8 @@ namespace Br.Com.LojaQueExplode.Api
             services.AddTransient<IPermissionRepository, EFPermissionRepository>();
             services.AddTransient<ICategoryRepository, EFCategoryRepository>();
             services.AddTransient<IProductRepository, EFProductRepository>();
+            services.AddTransient<IShoppingCartRepository, EFShoppingCartRepository>();
+            services.AddTransient<IPurchaseStatusRepository, EFPurchaseStatusRepository>();
         }
         private void RegisterUnitOfWork(IServiceCollection services)
         {
@@ -166,12 +177,16 @@ namespace Br.Com.LojaQueExplode.Api
         {
             var mapperConfiguration = new MapperConfiguration(config =>
             {
-                config.CreateMap<User, DTOUser>();
-                config.CreateMap<AuthenticationResult, DTOResultAuthentication>();
-                config.CreateMap<Product, DTOProduct>();
-                config.CreateMap<Category,DTOCategory>();
-                config.CreateMap<ComplementaryProductData, DTOComplementaryProductData>();
-                config.CreateMap<ProductPhoto, DTOProducPhoto>();
+                config.CreateMap<User, DTOUser>().ReverseMap();
+                 
+                config.CreateMap<AuthenticationResult, DTOResultAuthentication>().ReverseMap();
+                config.CreateMap<Product, DTOProduct>().ReverseMap();
+                config.CreateMap<Category,DTOCategory>().ReverseMap();
+                config.CreateMap<ComplementaryProductData, DTOComplementaryProductData>().ReverseMap();
+                config.CreateMap<ProductPhoto, DTOProductPhoto>().ReverseMap();
+                config.CreateMap<DTOProductShoppingCart, ProductShoppingCart>().ReverseMap();
+                config.CreateMap<DTOPurchaseStatus, PurchaseStatus>().ReverseMap();
+                config.CreateMap<DTOShoppingCart, ShoppingCart>().ReverseMap();
             });
 
             IMapper mapper = mapperConfiguration.CreateMapper();

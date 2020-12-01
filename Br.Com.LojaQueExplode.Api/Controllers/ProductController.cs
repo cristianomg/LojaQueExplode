@@ -19,13 +19,11 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
     [ApiController]
     public class ProductController : BaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IProductRepository _productRepository;
         private readonly ICreateProductService _createProductService;
-        public ProductController(IUnitOfWork unitOfWork, IProductRepository productRepository,
+        public ProductController(IProductRepository productRepository,
             ICreateProductService createProductService, IMapper mapper) : base(mapper)
         {
-            _unitOfWork = unitOfWork;
             _productRepository = productRepository;
             _createProductService = createProductService;
         }
@@ -66,7 +64,7 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
         }
         [HttpGet(Name = "Listar-Produtos")]
         [Authorize]
-        public IActionResult ListProduct([FromBody] DTOCreateCategory body)
+        public IActionResult ListProduct()
         {
             try
             {

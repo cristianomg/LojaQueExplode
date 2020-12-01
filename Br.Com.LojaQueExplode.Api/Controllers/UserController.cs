@@ -5,7 +5,6 @@ using Br.Com.LojaQueExplode.Business.DTOs;
 using Br.Com.LojaQueExplode.Business.Exceptions;
 using Br.Com.LojaQueExplode.Business.Services.Abstract;
 using Br.Com.LojaQueExplode.Infra.Repositories.Abstract;
-using Br.Com.LojaQueExplode.Infra.UnitOfWork.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -17,14 +16,9 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
     [Authorize]
     public class UserController : BaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserRepository _userRepository;
         private readonly ICreateUserService _createUserService;
-        public UserController(IUnitOfWork unitOfWork, IUserRepository userRepository,
-            ICreateUserService createUserService, IMapper mapper) : base(mapper)
+        public UserController(ICreateUserService createUserService, IMapper mapper) : base(mapper)
         {
-            _unitOfWork = unitOfWork;
-            _userRepository = userRepository;
             _createUserService = createUserService;
         }
 

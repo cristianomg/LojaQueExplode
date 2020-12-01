@@ -7,6 +7,7 @@ namespace Br.Com.LojaQueExplode.Api.Models
 {
     public class DTOProduct
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Guid CategoryId { get; set; }
@@ -14,10 +15,10 @@ namespace Br.Com.LojaQueExplode.Api.Models
         public int Quantity { get; set; }
         public virtual DTOCategory Category { get; set; }
         public virtual DTOComplementaryProductData ComplementaryProductData { get; set; }
-        public virtual ICollection<DTOProducPhoto> Photos { get; set; }
+        public virtual ICollection<DTOProductPhoto> Photos { get; set; }
 
     }
-    public class DTOProducPhoto
+    public class DTOProductPhoto
     {
         public string Name { get; set; }
         public string MimiType { get; set; }

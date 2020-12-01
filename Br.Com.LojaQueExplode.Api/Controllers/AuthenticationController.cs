@@ -43,7 +43,7 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
                 }
                 return BadRequest("Email ou senha invalido tente novamente.");
             }
-            catch(Exception ex)
+            catch
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ErroMessage);
 

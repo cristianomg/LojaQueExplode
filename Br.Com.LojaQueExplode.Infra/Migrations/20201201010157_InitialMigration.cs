@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Br.Com.LojaQueExplode.Infra.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -163,7 +163,8 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 {
                     ProductId = table.Column<Guid>(nullable: false),
                     ShoppingCartId = table.Column<Guid>(nullable: false),
-                    Id = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,8 +188,8 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("d39f7e78-8f26-4541-b9cb-f13b52011cff"), "Common" },
-                    { new Guid("3588783c-c63d-436d-8066-c478bf757f51"), "Administration" }
+                    { new Guid("a4e1059d-0efe-42a5-b1b3-c94458be3b87"), "Common" },
+                    { new Guid("198b8a91-23f4-4d73-99a0-63ae594f39b5"), "Administration" }
                 });
 
             migrationBuilder.InsertData(
@@ -196,12 +197,12 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 columns: new[] { "Id", "Code", "Description", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("3baedf97-cca0-4b3a-9108-5e9adda8a33a"), 1, "", "Open" },
-                    { new Guid("cacc4683-5b81-411a-b650-7327f936b34e"), 2, "", "RequestedProducts" },
-                    { new Guid("2faf6f6f-7022-48ad-8208-b4b76620f967"), 3, "", "PaymentMade" },
-                    { new Guid("d8a9d862-1d2c-4d7e-852c-185d377bd1c7"), 4, "", "PaymentApproved" },
-                    { new Guid("a798cf82-085e-4c21-9ec9-b67ab1f471a3"), 5, "", "SendedProducts" },
-                    { new Guid("1d8f40d8-b3ce-4bdd-aeb1-568c26bdb630"), 6, "", "PurchaseFinished" }
+                    { new Guid("b167e4b3-597d-4696-bf2c-b4fda3f0e8eb"), 1, "", "Open" },
+                    { new Guid("45b7c40e-c952-4b28-938e-3da2e665641f"), 2, "", "RequestedProducts" },
+                    { new Guid("bf6dbb82-98a6-4ca9-b461-e3998af66d98"), 3, "", "PaymentMade" },
+                    { new Guid("c7a24e0a-f1b4-45b0-a461-3fdb31bb63bd"), 4, "", "PaymentApproved" },
+                    { new Guid("bd60421b-f8ff-415f-90d5-260a6cda29b2"), 5, "", "SendedProducts" },
+                    { new Guid("475dfdb2-5583-46a1-9799-77702c1e59bc"), 6, "", "PurchaseFinished" }
                 });
 
             migrationBuilder.CreateIndex(
