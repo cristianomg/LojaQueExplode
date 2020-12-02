@@ -12,7 +12,7 @@ namespace Br.Com.LojaQueExplode.Infra.Context
         public LojaQueExplodeContext(DbContextOptions<LojaQueExplodeContext> options): base(options)
         {
             this.ChangeTracker.LazyLoadingEnabled = false;
-            this.Database.Migrate();
+            //this.Database.Migrate();
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ComplementaryProductData> ComplementaryProductDatas { get; set; }

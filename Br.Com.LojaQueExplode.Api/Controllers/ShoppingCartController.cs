@@ -39,7 +39,7 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
                     .Where(x => x.PurchaseStatus.Code > purchaseStatus.Code);
                 return Ok(_mapper.ProjectTo<DTOShoppingCart>(shoppingCart));
             }
-            catch(Exception ex)
+            catch
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ErroMessage);
 

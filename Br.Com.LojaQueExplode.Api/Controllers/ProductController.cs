@@ -4,6 +4,7 @@ using Br.Com.LojaQueExplode.Api.Validations.Product;
 using Br.Com.LojaQueExplode.Business.DTOs;
 using Br.Com.LojaQueExplode.Business.Exceptions;
 using Br.Com.LojaQueExplode.Business.Services.Abstract;
+using Br.Com.LojaQueExplode.Domain.Entities;
 using Br.Com.LojaQueExplode.Domain.Enums;
 using Br.Com.LojaQueExplode.Infra.Repositories.Abstract;
 using Br.Com.LojaQueExplode.Infra.UnitOfWork.Abstract;
@@ -68,11 +69,11 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
         {
             try
             {
-                var products = _productRepository.GetAll();
+                var products = _productRepository.GetAllWithInclude(new List<string> { nameof(Product.Photos) });
 
                 if (products != null && products.Any())
                 {
-                    var dto = _mapper.Map<List<DTOProduct>>(products);
+                    var dto = _mapper.ProjectTo<DTOProduct>(products);
                     return Ok(dto);
                 }
                 return NoContent();

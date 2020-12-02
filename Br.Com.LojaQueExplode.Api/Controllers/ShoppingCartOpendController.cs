@@ -67,7 +67,7 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [HttpPut]
+        [HttpPost]
         [Route("add-item")]
         public IActionResult AddItemOnCartOpen(DTOInsertProductOnShoppingCart model)
         {
@@ -90,7 +90,7 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [HttpPut]
+        [HttpPost]
         [Route("remove-item")]
         public IActionResult RemoveItemOnCartOpen(DTOInsertProductOnShoppingCart model)
         {
@@ -111,7 +111,7 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [HttpPut]
+        [HttpPost]
         [Route("close/{userId}")]
         public IActionResult CloseShoppingCartOpened(Guid userId)
         {

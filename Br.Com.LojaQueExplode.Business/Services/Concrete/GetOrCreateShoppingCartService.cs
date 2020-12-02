@@ -17,18 +17,21 @@ namespace Br.Com.LojaQueExplode.Business.Services.Concrete
         private readonly IUserRepository _userRepository;
         private readonly IPurchaseStatusRepository _purchaseStatusRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IProductRepository _productRepository;
 
 
         public GetOrCreateShoppingCartService(
             IShoppingCartRepository shoppingCartRepository,
             IUserRepository userRepository,
             IUnitOfWork unitOfWork,
-            IPurchaseStatusRepository purchaseStatusRepository)
+            IPurchaseStatusRepository purchaseStatusRepository,
+            IProductRepository productRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _purchaseStatusRepository = purchaseStatusRepository;
+            _productRepository = productRepository;
         }
         public ShoppingCart Execute(Guid userId)
         {
@@ -37,16 +40,22 @@ namespace Br.Com.LojaQueExplode.Business.Services.Concrete
             if (user == null)
                 throw new ValidationOnServiceException("Usuário não encontrado.");
 
-            var shoppingCartOpen = _shoppingCartRepository.GetAllWithInclude(new List<string> { nameof(ShoppingCart.User), nameof(ShoppingCart.ProductShoppingCarts) })
+            var shoppingCartOpen = _shoppingCartRepository
+                .GetAllWithInclude(new List<string> { nameof(ShoppingCart.User), nameof(ShoppingCart.ProductShoppingCarts) })
                 .FirstOrDefault(x => x.PurchaseStatus.Name == nameof(PurchaseStatusEnum.Open) && x.UserId == user.Id);
 
-            var statusShoppingCart = _purchaseStatusRepository.GetByName(nameof(PurchaseStatusEnum.Open));
-
             if (shoppingCartOpen != null)
+            {
+                foreach (var productShoppingCart in shoppingCartOpen.ProductShoppingCarts)
+                {
+                    var product = _productRepository.GetAllWithInclude(new List<string> { nameof(Product.Photos) }).First(x => x.Id == productShoppingCart.ProductId);
+                    productShoppingCart.Product = product;
+                }
                 return shoppingCartOpen;
-
+            }
             else
             {
+                var statusShoppingCart = _purchaseStatusRepository.GetByName(nameof(PurchaseStatusEnum.Open));
                 var newShoppingCartOpen = _shoppingCartRepository.Insert(new ShoppingCart
                 {
                     UserId = user.Id,
