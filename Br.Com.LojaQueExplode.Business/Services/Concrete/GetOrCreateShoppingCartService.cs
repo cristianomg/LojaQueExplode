@@ -51,6 +51,7 @@ namespace Br.Com.LojaQueExplode.Business.Services.Concrete
                     var product = _productRepository.GetAllWithInclude(new List<string> { nameof(Product.Photos) }).First(x => x.Id == productShoppingCart.ProductId);
                     productShoppingCart.Product = product;
                 }
+
                 return shoppingCartOpen;
             }
             else

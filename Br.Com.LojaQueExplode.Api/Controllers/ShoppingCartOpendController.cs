@@ -54,8 +54,10 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
                 try
                 {
                     var shoppingCartOpened = _getOrCreateShoppingCartService.Execute(userId);
+                    var dto = _mapper.Map<DTOShoppingCart>(shoppingCartOpened);
 
-                    return Ok(_mapper.Map<DTOShoppingCart>(shoppingCartOpened));
+                    dto.SubTotal = shoppingCartOpened.CalculateSubTotal();
+                    return Ok(dto);
                 }
                 catch (ValidationOnServiceException ex)
                 {

@@ -9,6 +9,7 @@ namespace Br.Com.LojaQueExplode.Api.Models
         public Guid UserId { get; set; }
         public Guid PurchaseStatusId { get; set; }
         public virtual DTOPurchaseStatus PurchaseStatus { get; set; }
+        public int SubTotal { get; set; }
         public virtual ICollection<DTOProductShoppingCart> ProductShoppingCarts { get; set; }
     }
 }

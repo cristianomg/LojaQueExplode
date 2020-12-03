@@ -14,5 +14,6 @@ namespace Br.Com.LojaQueExplode.Domain.Entities
         public virtual Product Product { get; set; }
         public virtual ShoppingCart ShoppingCart { get; set; }
 
+
     }
 }
