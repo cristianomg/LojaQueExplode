@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Br.Com.LojaQueExplode.Infra.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,9 +11,9 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -24,9 +24,9 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 name: "ComplementaryProductDatas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    WarrantyTime = table.Column<int>(nullable: false),
-                    Weight = table.Column<int>(nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    WarrantyTime = table.Column<int>(type: "integer", nullable: false),
+                    Weight = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,8 +37,8 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 name: "Permissions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 30, nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -49,10 +49,10 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 name: "PurchaseStatus",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 40, nullable: false),
-                    Code = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    Code = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,13 +63,13 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 255, nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    CategoryId = table.Column<Guid>(nullable: false),
-                    Price = table.Column<int>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false),
-                    ComplementaryProductDataID = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Price = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    ComplementaryProductDataID = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,7 +81,7 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Products_ComplementaryProductDatas_ComplementaryProductDataID",
+                        name: "FK_Products_ComplementaryProductDatas_ComplementaryProductData~",
                         column: x => x.ComplementaryProductDataID,
                         principalTable: "ComplementaryProductDatas",
                         principalColumn: "Id",
@@ -92,12 +92,12 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Email = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false),
-                    Phone = table.Column<string>(nullable: false),
-                    PermissionId = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Phone = table.Column<string>(type: "text", nullable: false),
+                    PermissionId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,11 +114,11 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 name: "ProductPhotos",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    ProductId = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    MimiType = table.Column<string>(maxLength: 40, nullable: false),
-                    Url = table.Column<string>(nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    MimiType = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -135,10 +135,10 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 name: "ShoppingCarts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    PurchaseStatusId = table.Column<Guid>(nullable: false),
-                    EndedDate = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PurchaseStatusId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EndedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -161,10 +161,10 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 name: "ProductShoppingCarts",
                 columns: table => new
                 {
-                    ProductId = table.Column<Guid>(nullable: false),
-                    ShoppingCartId = table.Column<Guid>(nullable: false),
-                    Id = table.Column<Guid>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false)
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ShoppingCartId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -188,8 +188,8 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("a4e1059d-0efe-42a5-b1b3-c94458be3b87"), "Common" },
-                    { new Guid("198b8a91-23f4-4d73-99a0-63ae594f39b5"), "Administration" }
+                    { new Guid("2462edf3-7af3-4c31-864a-a52bb282b834"), "Common" },
+                    { new Guid("2753eb8a-1789-4b7c-ad60-0b9138326bd8"), "Administration" }
                 });
 
             migrationBuilder.InsertData(
@@ -197,12 +197,12 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 columns: new[] { "Id", "Code", "Description", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("b167e4b3-597d-4696-bf2c-b4fda3f0e8eb"), 1, "", "Open" },
-                    { new Guid("45b7c40e-c952-4b28-938e-3da2e665641f"), 2, "", "RequestedProducts" },
-                    { new Guid("bf6dbb82-98a6-4ca9-b461-e3998af66d98"), 3, "", "PaymentMade" },
-                    { new Guid("c7a24e0a-f1b4-45b0-a461-3fdb31bb63bd"), 4, "", "PaymentApproved" },
-                    { new Guid("bd60421b-f8ff-415f-90d5-260a6cda29b2"), 5, "", "SendedProducts" },
-                    { new Guid("475dfdb2-5583-46a1-9799-77702c1e59bc"), 6, "", "PurchaseFinished" }
+                    { new Guid("bb78e11b-3ef7-446d-8a96-aa919961660e"), 1, "", "Open" },
+                    { new Guid("c2626930-649d-4dc3-b462-7336a9553531"), 2, "", "RequestedProducts" },
+                    { new Guid("acfcc32e-9bde-41fc-870a-7d4bbf278a72"), 3, "", "PaymentMade" },
+                    { new Guid("84878113-d4f2-4f22-bfdd-0643249e11e6"), 4, "", "PaymentApproved" },
+                    { new Guid("72c24800-10d5-4927-b967-10e03ade4ca4"), 5, "", "SendedProducts" },
+                    { new Guid("faba4ae0-c7fe-4582-9c07-af8f63cda12f"), 6, "", "PurchaseFinished" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -215,8 +215,7 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 name: "IX_Permissions_Name",
                 table: "Permissions",
                 column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductPhotos_ProductId",

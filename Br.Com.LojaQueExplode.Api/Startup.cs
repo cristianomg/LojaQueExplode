@@ -46,7 +46,7 @@ namespace Br.Com.LojaQueExplode.Api
                 .Build();
             var connectionString = configuration.GetConnectionString("LojaQueExplodeContext");
             services.AddDbContext<LojaQueExplodeContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseNpgsql(connectionString));
 
             services.AddControllers();
 
@@ -114,6 +114,12 @@ namespace Br.Com.LojaQueExplode.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<LojaQueExplodeContext>();
+                context.Database.Migrate();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

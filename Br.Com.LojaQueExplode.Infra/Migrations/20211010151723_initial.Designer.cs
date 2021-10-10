@@ -3,38 +3,38 @@ using System;
 using Br.Com.LojaQueExplode.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Br.Com.LojaQueExplode.Infra.Migrations
 {
     [DbContext(typeof(LojaQueExplodeContext))]
-    [Migration("20201201010157_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20211010151723_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .UseIdentityByDefaultColumns()
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -48,13 +48,13 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("WarrantyTime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Weight")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -65,29 +65,28 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Permissions");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a4e1059d-0efe-42a5-b1b3-c94458be3b87"),
+                            Id = new Guid("2462edf3-7af3-4c31-864a-a52bb282b834"),
                             Name = "Common"
                         },
                         new
                         {
-                            Id = new Guid("198b8a91-23f4-4d73-99a0-63ae594f39b5"),
+                            Id = new Guid("2753eb8a-1789-4b7c-ad60-0b9138326bd8"),
                             Name = "Administration"
                         });
                 });
@@ -96,27 +95,27 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ComplementaryProductDataID")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -135,23 +134,23 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("MimiType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -163,16 +162,16 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
             modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.ProductShoppingCart", b =>
                 {
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ShoppingCartId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("ProductId", "ShoppingCartId");
 
@@ -185,20 +184,20 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Code")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
 
                     b.HasKey("Id");
 
@@ -207,42 +206,42 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b167e4b3-597d-4696-bf2c-b4fda3f0e8eb"),
+                            Id = new Guid("bb78e11b-3ef7-446d-8a96-aa919961660e"),
                             Code = 1,
                             Description = "",
                             Name = "Open"
                         },
                         new
                         {
-                            Id = new Guid("45b7c40e-c952-4b28-938e-3da2e665641f"),
+                            Id = new Guid("c2626930-649d-4dc3-b462-7336a9553531"),
                             Code = 2,
                             Description = "",
                             Name = "RequestedProducts"
                         },
                         new
                         {
-                            Id = new Guid("bf6dbb82-98a6-4ca9-b461-e3998af66d98"),
+                            Id = new Guid("acfcc32e-9bde-41fc-870a-7d4bbf278a72"),
                             Code = 3,
                             Description = "",
                             Name = "PaymentMade"
                         },
                         new
                         {
-                            Id = new Guid("c7a24e0a-f1b4-45b0-a461-3fdb31bb63bd"),
+                            Id = new Guid("84878113-d4f2-4f22-bfdd-0643249e11e6"),
                             Code = 4,
                             Description = "",
                             Name = "PaymentApproved"
                         },
                         new
                         {
-                            Id = new Guid("bd60421b-f8ff-415f-90d5-260a6cda29b2"),
+                            Id = new Guid("72c24800-10d5-4927-b967-10e03ade4ca4"),
                             Code = 5,
                             Description = "",
                             Name = "SendedProducts"
                         },
                         new
                         {
-                            Id = new Guid("475dfdb2-5583-46a1-9799-77702c1e59bc"),
+                            Id = new Guid("faba4ae0-c7fe-4582-9c07-af8f63cda12f"),
                             Code = 6,
                             Description = "",
                             Name = "PurchaseFinished"
@@ -253,16 +252,16 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("EndedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("PurchaseStatusId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -277,27 +276,27 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("PermissionId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -325,6 +324,10 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                         .HasForeignKey("Br.Com.LojaQueExplode.Domain.Entities.Product", "ComplementaryProductDataID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("ComplementaryProductData");
                 });
 
             modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.ProductPhoto", b =>
@@ -334,6 +337,8 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.ProductShoppingCart", b =>
@@ -349,6 +354,10 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                         .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.ShoppingCart", b =>
@@ -364,6 +373,10 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("PurchaseStatus");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.User", b =>
@@ -373,6 +386,45 @@ namespace Br.Com.LojaQueExplode.Infra.Migrations
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Permission");
+                });
+
+            modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.Category", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.ComplementaryProductData", b =>
+                {
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.Permission", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.Product", b =>
+                {
+                    b.Navigation("Photos");
+
+                    b.Navigation("ProductShoppingCarts");
+                });
+
+            modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.PurchaseStatus", b =>
+                {
+                    b.Navigation("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.ShoppingCart", b =>
+                {
+                    b.Navigation("ProductShoppingCarts");
+                });
+
+            modelBuilder.Entity("Br.Com.LojaQueExplode.Domain.Entities.User", b =>
+                {
+                    b.Navigation("ShoppingCarts");
                 });
 #pragma warning restore 612, 618
         }
