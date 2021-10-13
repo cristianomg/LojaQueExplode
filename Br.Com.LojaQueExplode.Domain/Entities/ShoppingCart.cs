@@ -15,7 +15,7 @@ namespace Br.Com.LojaQueExplode.Domain.Entities
 
         public int CalculateSubTotal()
         {
-            return ProductShoppingCarts.Sum(x => x.Quantity) * ProductShoppingCarts.Sum(x => x.Product.Price);
+            return ProductShoppingCarts.Sum(x => x.Quantity * x.Product.Price);
         }
 
 
