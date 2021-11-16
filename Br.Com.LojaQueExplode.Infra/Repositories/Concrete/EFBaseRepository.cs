@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Br.Com.LojaQueExplode.Infra.Repositories.Concrete
@@ -42,7 +43,7 @@ namespace Br.Com.LojaQueExplode.Infra.Repositories.Concrete
                 return _dbSet.AsQueryable();
             }
 
-            public IQueryable<T> GetAllWithInclude(List<string> includes)
+        public IQueryable<T> GetAllWithInclude(params Expression<Func<T, object>>[] includes)
             {
                 var result = _dbSet.AsQueryable();
 

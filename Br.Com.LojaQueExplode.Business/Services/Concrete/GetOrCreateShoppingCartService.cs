@@ -41,14 +41,16 @@ namespace Br.Com.LojaQueExplode.Business.Services.Concrete
                 throw new ValidationOnServiceException("Usuário não encontrado.");
 
             var shoppingCartOpen = _shoppingCartRepository
-                .GetAllWithInclude(new List<string> { nameof(ShoppingCart.User), nameof(ShoppingCart.ProductShoppingCarts) })
+                .GetAllWithInclude(x=>x.ProductShoppingCarts,
+                                   x=>x.PurchaseStatus)
                 .FirstOrDefault(x => x.PurchaseStatus.Name == nameof(PurchaseStatusEnum.Open) && x.UserId == user.Id);
 
             if (shoppingCartOpen != null)
             {
                 foreach (var productShoppingCart in shoppingCartOpen.ProductShoppingCarts)
                 {
-                    var product = _productRepository.GetAllWithInclude(new List<string> { nameof(Product.Photos) }).First(x => x.Id == productShoppingCart.ProductId);
+                    var product = _productRepository.GetAllWithInclude(x=>x.Photos)
+                        .First(x => x.Id == productShoppingCart.ProductId);
                     productShoppingCart.Product = product;
                 }
 

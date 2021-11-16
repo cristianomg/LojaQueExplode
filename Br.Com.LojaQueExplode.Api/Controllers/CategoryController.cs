@@ -6,6 +6,7 @@ using Br.Com.LojaQueExplode.Business.Exceptions;
 using Br.Com.LojaQueExplode.Business.Services.Abstract;
 using Br.Com.LojaQueExplode.Domain.Enums;
 using Br.Com.LojaQueExplode.Infra.Repositories.Abstract;
+using Br.Com.LojaQueExplode.Infra.UnitOfWork.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -20,11 +21,14 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICreateCategoryService _createCategoryService;
+        private readonly IUnitOfWork _unitOfWork;
         public CategoryController(ICategoryRepository categoryRepository,
-            ICreateCategoryService createCategoryService, IMapper mapper) : base(mapper)
+            ICreateCategoryService createCategoryService,
+            IUnitOfWork unitOfWork, IMapper mapper) : base(mapper)
         {
             _categoryRepository = categoryRepository;
             _createCategoryService = createCategoryService;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost(Name = "Criar-Categoria")]
@@ -80,6 +84,35 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
             catch
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ErroMessage);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult Update([FromBody] DTOUpdateCategory dto)
+        {
+            try
+            {
+                var category = _categoryRepository.GetById(dto.Id);
+
+                if (category is null)
+                    return BadRequest("Categoria não encontrada.");
+
+                var categoryName = _categoryRepository.GetByName(dto.Name);
+
+                if (categoryName != null && category.Id != categoryName.Id)
+                    return BadRequest("Uma categoria com esse nome já existe.");
+                category.Name = dto.Name;
+                category.Description = dto.Description;
+
+                _categoryRepository.Update(category);
+
+                _unitOfWork.Save();
+
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(500);
             }
         }
     }

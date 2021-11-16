@@ -48,7 +48,7 @@ namespace Br.Com.LojaQueExplode.Business.Services.Concrete
                     {
                         Subject = new ClaimsIdentity(new Claim[]
                         {
-
+                            new Claim(ClaimTypes.NameIdentifier, existingUser.Id.ToString()),
                             new Claim(ClaimTypes.Name, existingUser.Name),
                             new Claim(ClaimTypes.Role, existingUser.Permission.Name),
 

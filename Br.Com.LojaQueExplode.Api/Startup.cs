@@ -14,6 +14,8 @@ using Br.Com.LojaQueExplode.Infra.UnitOfWork.Abstract;
 using Br.Com.LojaQueExplode.Infra.UnitOfWork.Concrete;
 using Br.Com.LojaQueExplode.Util.Security.Abstract;
 using Br.Com.LojaQueExplode.Util.Security.Concrete;
+using Br.Com.LojaQueExplode.Util.Smtp.Abstract;
+using Br.Com.LojaQueExplode.Util.Smtp.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -84,7 +86,15 @@ namespace Br.Com.LojaQueExplode.Api
 
             services.AddSwaggerGen(c =>
             {
-
+                c.OperationFilter<BearerAuthenticationFilter>();
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer"
+                });
                 c.SwaggerDoc("v1",
                     new OpenApiInfo
                     {
@@ -145,13 +155,15 @@ namespace Br.Com.LojaQueExplode.Api
 
         private void RegisterServices(IServiceCollection services)
         {
-            services.AddTransient<ICreateUserService, CreateUserService>();
-            services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
-            services.AddTransient<ICreateCategoryService, CreateCategoryService>();
-            services.AddTransient<ICreateProductService, CreateProductService>();
-            services.AddTransient<IAddProductOnShoppingCartService, AddProductOnShoppingCartService>();
-            services.AddTransient<IRemoveProductOnShoppingCartService, RemoveProductOnShoppingCartService>();
-            services.AddTransient<IGetOrCreateShoppingCartOpenedService, GetOrCreateShoppingCartService>();
+            services.AddScoped<ICreateUserService, CreateUserService>();
+            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+            services.AddScoped<ICreateCategoryService, CreateCategoryService>();
+            services.AddScoped<ICreateProductService, CreateProductService>();
+            services.AddScoped<IAddProductOnShoppingCartService, AddProductOnShoppingCartService>();
+            services.AddScoped<IRemoveProductOnShoppingCartService, RemoveProductOnShoppingCartService>();
+            services.AddScoped<IGetOrCreateShoppingCartOpenedService, GetOrCreateShoppingCartService>();
+            services.AddScoped<IPasswordRecoveryService, PasswordRecoveryService>();
+            services.AddScoped<ISendMailService, SendMailService>();
 
         }
 
@@ -192,7 +204,9 @@ namespace Br.Com.LojaQueExplode.Api
                 config.CreateMap<ProductPhoto, DTOProductPhoto>().ReverseMap();
                 config.CreateMap<DTOProductShoppingCart, ProductShoppingCart>().ReverseMap();
                 config.CreateMap<DTOPurchaseStatus, PurchaseStatus>().ReverseMap();
-                config.CreateMap<DTOShoppingCart, ShoppingCart>().ReverseMap();
+                config.CreateMap<DTOShoppingCart, ShoppingCart>();
+                config.CreateMap<ShoppingCart, DTOShoppingCart>()
+                    .ForMember(dest => dest.SubTotal, source => source.MapFrom(opt => opt.CalculateSubTotal()));
             });
 
             IMapper mapper = mapperConfiguration.CreateMapper();

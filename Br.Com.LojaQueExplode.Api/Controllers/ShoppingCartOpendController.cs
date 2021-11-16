@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
+using Br.Com.LojaQueExplode.Api.Extensions;
 using Br.Com.LojaQueExplode.Api.Models;
 using Br.Com.LojaQueExplode.Business.DTOs;
 using Br.Com.LojaQueExplode.Business.Exceptions;
 using Br.Com.LojaQueExplode.Business.Services.Abstract;
-using Br.Com.LojaQueExplode.Domain.Entities;
 using Br.Com.LojaQueExplode.Domain.Enums;
 using Br.Com.LojaQueExplode.Infra.Repositories.Abstract;
 using Br.Com.LojaQueExplode.Infra.UnitOfWork.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 
 namespace Br.Com.LojaQueExplode.Api.Controllers
@@ -35,7 +33,7 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
             IPurchaseStatusRepository purchaseStatusRepository,
             IGetOrCreateShoppingCartOpenedService getOrCreateShoppingCartService,
             IAddProductOnShoppingCartService addProductOnShoppingCartService,
-            IRemoveProductOnShoppingCartService removeProductOnShoppingCartService) : base (mapper)
+            IRemoveProductOnShoppingCartService removeProductOnShoppingCartService) : base(mapper)
         {
             _shoppingCartRepository = shoppingCartRepository;
             _userRepository = userRepository;
@@ -46,46 +44,40 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
             _removeProductOnShoppingCartService = removeProductOnShoppingCartService;
         }
         [HttpGet]
-        [Route("{userId}")]
-        public IActionResult FindCartOpen(Guid userId)
+        public IActionResult FindCartOpen()
         {
+            var userId = HttpContext.GetUserID();
             try
             {
-                try
-                {
-                    var shoppingCartOpened = _getOrCreateShoppingCartService.Execute(userId);
-                    var dto = _mapper.Map<DTOShoppingCart>(shoppingCartOpened);
+                var shoppingCartOpened = _getOrCreateShoppingCartService.Execute(userId);
+                var dto = _mapper.Map<DTOShoppingCart>(shoppingCartOpened);
 
-                    dto.SubTotal = shoppingCartOpened.CalculateSubTotal();
-                    return Ok(dto);
-                }
-                catch (ValidationOnServiceException ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                dto.SubTotal = shoppingCartOpened.CalculateSubTotal();
+                return Ok(dto);
             }
-            catch(Exception ex)
+            catch (ValidationOnServiceException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
+
         }
         [HttpPost]
         [Route("add-item")]
         public IActionResult AddItemOnCartOpen(DTOInsertProductOnShoppingCart model)
         {
+            model.UserId = HttpContext.GetUserID();
             try
             {
-                try
-                {
-                    var shoppingcart = _addProductOnShoppingCartService.Execute(model);
-                    return Ok(_mapper.Map<DTOShoppingCart>(shoppingcart));
-                }
-                catch (ValidationOnServiceException ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-
-
+                var shoppingcart = _addProductOnShoppingCartService.Execute(model);
+                return Ok(_mapper.Map<DTOShoppingCart>(shoppingcart));
+            }
+            catch (ValidationOnServiceException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -96,6 +88,7 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
         [Route("remove-item")]
         public IActionResult RemoveItemOnCartOpen(DTOInsertProductOnShoppingCart model)
         {
+            model.UserId = HttpContext.GetUserID();
             try
             {
                 try
@@ -114,29 +107,27 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
             }
         }
         [HttpPost]
-        [Route("close/{userId}")]
-        public IActionResult CloseShoppingCartOpened(Guid userId)
+        [Route("close")]
+        public IActionResult CloseShoppingCartOpened()
         {
+            var userId = HttpContext.GetUserID();
             try
             {
-                try
-                {
-                    var shoppingcart = _getOrCreateShoppingCartService.Execute(userId);
-                    var purchaseStatus = _purchaseStatusRepository.GetByName(nameof(PurchaseStatusEnum.RequestedProducts));
+                var shoppingcart = _getOrCreateShoppingCartService.Execute(userId);
+                var purchaseStatus = _purchaseStatusRepository.GetByName(nameof(PurchaseStatusEnum.RequestedProducts));
 
-                    shoppingcart.PurchaseStatusId = purchaseStatus.Id;
-                    _shoppingCartRepository.Update(shoppingcart);
-                    var hasUpdate = _unitOfWork.Save();
+                shoppingcart.PurchaseStatusId = purchaseStatus.Id;
+                _shoppingCartRepository.Update(shoppingcart);
+                var hasUpdate = _unitOfWork.Save();
 
-                    if (hasUpdate > 0)
-                        return Ok();
+                if (hasUpdate > 0)
+                    return Ok();
 
-                    return StatusCode((int)HttpStatusCode.NotModified);
-                }
-                catch (ValidationOnServiceException ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                return StatusCode((int)HttpStatusCode.NotModified);
+            }
+            catch (ValidationOnServiceException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

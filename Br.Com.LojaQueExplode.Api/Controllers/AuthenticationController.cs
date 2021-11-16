@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Br.Com.LojaQueExplode.Api.Models;
 using Br.Com.LojaQueExplode.Api.Validations.Auth;
 using Br.Com.LojaQueExplode.Business.DTOs;
 using Br.Com.LojaQueExplode.Business.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Br.Com.LojaQueExplode.Api.Controllers
 {
@@ -20,9 +17,14 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
     public class AuthenticationController : BaseController
     {
         private readonly IUserAuthenticationService _authService;
-        public AuthenticationController(IMapper mapper, IUserAuthenticationService authService) : base(mapper)
+        private readonly IPasswordRecoveryService _passwordRecoveryService;
+        public AuthenticationController(IMapper mapper,
+                                        IUserAuthenticationService authService,
+                                        IPasswordRecoveryService passwordRecoveryService)
+                                    : base(mapper)
         {
             _authService = authService;
+            _passwordRecoveryService = passwordRecoveryService;
         }
         [HttpPost(Name = "Obter-token-autenticacao")]
         [AllowAnonymous]
@@ -47,6 +49,26 @@ namespace Br.Com.LojaQueExplode.Api.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ErroMessage);
 
+            }
+        }
+        [AllowAnonymous]
+        [HttpPost("PasswordRecovery")]
+        public async Task<IActionResult> PasswordRecovery([FromBody] DTOPasswordRecovery dto)
+        {
+            try
+            {
+                await _passwordRecoveryService.Execute(dto);
+
+                return Ok();
+
+            }
+            catch (ApplicationException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
     }

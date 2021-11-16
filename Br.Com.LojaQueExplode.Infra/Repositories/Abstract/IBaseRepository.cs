@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Br.Com.LojaQueExplode.Infra.Repositories.Abstract
 {
@@ -12,6 +12,6 @@ namespace Br.Com.LojaQueExplode.Infra.Repositories.Abstract
         T Insert(T obj);
         void Delete(T obj);
         T Update(T obj);
-        IQueryable<T> GetAllWithInclude(List<string> includes);
+        IQueryable<T> GetAllWithInclude(params Expression<Func<T, object>>[] includes);
     }
 }
